@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>把想念写成一颗心 · 我与兰兰</title>
+<style>
+*{box-sizing:border-box}
+:root{font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#453c48;background:#faf9fc;letter-spacing:0}
+body{margin:0;min-height:100svh}
+header{max-width:1040px;margin:auto;padding:24px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#806b79}
+a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}
+main{max-width:850px;margin:auto;padding:18px 20px 36px;text-align:center}
+.eyebrow{font-size:12px;letter-spacing:0;color:#997080;margin:0 0 12px}
+h1{font-size:28px;font-weight:500;margin:0 0 12px}
+.dedication{font-size:14px;line-height:1.9;margin:0;color:#807481}
+.stage{position:relative;margin:30px auto 0;max-width:720px}
+.heart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(7,60px);gap:9px;width:100%;border:0;padding:0;background:transparent;color:inherit;font:inherit;cursor:default}
+.heart:focus-visible{outline:2px solid #b75b7b;outline-offset:12px;border-radius:8px}
+.bubble{display:flex;align-items:center;justify-content:center;padding:5px 3px;border-radius:8px;font-size:14px;line-height:1.5;font-weight:500;box-shadow:0 3px 0 rgba(80,48,73,.05);opacity:0;transform:translateY(20px) scale(.75);animation:arrive .6s cubic-bezier(.18,.8,.3,1.15) both;animation-delay:var(--delay);background:var(--bg);color:var(--fg)}
+.heart.ready{cursor:pointer;animation:heartbeat 2.8s ease-in-out infinite}
+.heart.ready:hover .bubble{filter:brightness(1.025)}
+.caption{min-height:48px;margin:24px 0 0;color:#a04c6d;font-size:15px;line-height:1.8}
+.open-photo{display:block;margin:10px auto 0;border:0;border-bottom:1px solid #c78ca3;padding:6px 0;background:transparent;color:#a04c6d;font:inherit;cursor:pointer}
+.open-photo:disabled{visibility:hidden}
+.photo{display:none;margin:auto;opacity:0}
+.photo img{display:block;max-width:100%;width:auto;height:auto;max-height:65svh;object-fit:contain;margin:0 auto;border-radius:4px;box-shadow:0 12px 36px #453c4818}
+.photo figcaption{font-size:15px;line-height:1.9;margin:20px 0;color:#7f5269}
+.stage.departing .heart{animation:leave .5s ease both;pointer-events:none}
+.stage.show-photo .heart,.stage.show-photo .caption,.stage.show-photo .open-photo{display:none}
+.stage.show-photo .photo{display:block;animation:photo-in .8s ease both}
+.replay{border:0;background:transparent;color:#9a657a;width:42px;height:42px;font-size:24px;cursor:pointer;border-radius:50%}
+.replay:hover{background:#f1e7ed}.replay:focus-visible{outline:2px solid #9a657a}
+footer{text-align:center;color:#aa94a2;font-size:12px;margin:18px 0}
+@keyframes arrive{from{opacity:0;transform:translateY(20px) scale(.75)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}45%{transform:scale(1.012)}}
+@keyframes leave{to{opacity:0;transform:scale(.94)}}
+@keyframes photo-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){header{padding:20px 16px}main{padding:22px 12px 26px}h1{font-size:23px}.dedication{font-size:13px}.stage{margin-top:32px}.heart{grid-template-rows:repeat(7,45px);gap:5px}.bubble{font-size:10px;padding:3px 1px;border-radius:6px}.caption{font-size:14px}.photo img{max-height:62svh}}
+@media(prefers-reduced-motion:reduce){.bubble{animation:none;opacity:1;transform:none}.heart.ready,.stage.departing .heart,.stage.show-photo .photo{animation:none}.stage.show-photo .photo{opacity:1}}
+</style>
+</head>
+<body>
+<header><a href="index.html" aria-label="返回完整视频">← 我们的故事</a><span>我 &amp; 兰兰 · 100天</span></header>
+<main>
+<p class="eyebrow">写给兰兰</p>
+<h1>把想念，写成一颗心</h1>
+<p class="dedication">虽然隔着两座城，<br>每一句牵挂，都想说给你听。</p>
+<div class="stage" id="stage">
+<button class="heart" id="heart" type="button" aria-label="祝福爱心，完成后打开我们的合照" aria-disabled="true"></button>
+<p class="caption" id="caption" aria-live="polite">好好吃饭，好好睡觉。<br>还有好多好多话，想对你说。</p>
+<button class="open-photo" id="openPhoto" type="button" disabled>藏在心里的我们 →</button>
+<figure class="photo" id="photo">
+<img src="couple.jpg" alt="我和兰兰的合照" width="2080" height="1170">
+<figcaption>第100天，喜欢你这件事还在继续。<br>距离有远近，爱意没有。</figcaption>
+<button class="replay" id="replay" type="button" aria-label="重看祝福爱心" title="重看祝福爱心">↻</button>
+</figure>
+</div>
+</main>
+<footer>好好生活，也好好相爱。</footer>
+<script>
+const wishes = [
+  '好好吃饭','好好睡觉','学习加油','每天开心',
+  '记得喝水','别太累啦','天冷加衣','做个好梦','照顾自己','想你啦','天天开心',
+  '按时吃饭','早点休息','少熬夜呀','考试顺利','烦恼走开','平安喜乐','多笑一笑',
+  '一直陪你','记得带伞','慢慢来呀','勇敢向前','累了歇歇','抱抱兰兰','未来可期',
+  '分享日常','想见到你','珍惜彼此','一起努力','万事顺意',
+  '不止百天','来日方长','还有我们',
+  '一直爱你'
+];
+const rows=[[1,2,4,5],[0,1,2,3,4,5,6],[0,1,2,3,4,5,6],[0,1,2,3,4,5,6],[1,2,3,4,5],[2,3,4],[3]];
+const colors=[['#f7dce5','#88415a'],['#dceee8','#326858'],['#e3e8fc','#53628b'],['#fce8cd','#855c30'],['#ede2f4','#755488'],['#dceff6','#3e6c80']];
+const heart=document.querySelector('#heart'),stage=document.querySelector('#stage'),caption=document.querySelector('#caption'),openPhoto=document.querySelector('#openPhoto'),replay=document.querySelector('#replay');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let ready=false,opened=false,timer,transitionTimer;
+function start(){
+  clearTimeout(timer);clearTimeout(transitionTimer);
+  ready=false;opened=false;stage.className='stage';heart.className='heart';
+  heart.setAttribute('aria-disabled','true');openPhoto.disabled=true;
+  caption.innerHTML='好好吃饭，好好睡觉。<br>还有好多好多话，想对你说。';
+  heart.replaceChildren();
+  let i=0;
+  rows.forEach((cols,row)=>cols.forEach(col=>{
+    const bubble=document.createElement('span'),color=colors[(i*5+row)%colors.length];
+    bubble.className='bubble';bubble.textContent=wishes[i];
+    bubble.style.cssText=`grid-column:${col+1};grid-row:${row+1};--delay:${i*.19}s;--bg:${color[0]};--fg:${color[1]}`;
+    heart.append(bubble);i++;
+  }));
+  timer=setTimeout(()=>{
+    ready=true;heart.classList.add('ready');heart.setAttribute('aria-disabled','false');openPhoto.disabled=false;
+    caption.innerHTML='每一句祝福，都是我在想你。<br>每一次想你，都更期待下一次见面。';
+  },reduced.matches?0:(wishes.length-1)*190+650);
+}
+function reveal(){
+  if(!ready||opened)return;
+  opened=true;stage.classList.add('departing');heart.setAttribute('aria-disabled','true');openPhoto.disabled=true;
+  transitionTimer=setTimeout(()=>{stage.className='stage show-photo';replay.focus({preventScroll:true});},reduced.matches?0:500);
+}
+heart.addEventListener('click',reveal);openPhoto.addEventListener('click',reveal);
+replay.addEventListener('click',()=>{start();heart.focus({preventScroll:true});});
+start();
+</script>
+</body>
+</html>
